@@ -24,14 +24,14 @@ def apply_averaging_blur(frame, kernel_size):
     return frame
 
 
-def apply_sobel_edge(frame, thr_var):
+def apply_sobel_edge(frame, threshold):
     """
     TODO: Implement Sobel Edge Detection.
     1. Convert the input frame to grayscale.
     2. Calculate the Sobel gradients in the X and Y directions (using cv2.CV_64F).
     3. Compute the total gradient magnitude.
     4. Normalize the magnitude to an 8-bit range (0-255).
-    5. Apply a binary threshold using the provided 'thr_var'.
+    5. Apply a binary threshold using the provided 'threshold'.
     6. Return the resulting binary edge image.
     """
     # Replace the line below with your implementation

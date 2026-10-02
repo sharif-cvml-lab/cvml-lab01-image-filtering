@@ -93,7 +93,7 @@ class AppWindow(QWidget):
         sobel_widget = QWidget()
         sobel_form = QFormLayout(sobel_widget)
         self.sl_sobel_t = self.create_slider(0, 255, 100, self.update_params)
-        sobel_form.addRow("Threshold (thr_var):", self.sl_sobel_t)
+        sobel_form.addRow("Threshold (threshold):", self.sl_sobel_t)
         
         # Canny Page
         canny_widget = QWidget()
