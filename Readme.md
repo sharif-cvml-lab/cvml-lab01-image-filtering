@@ -1,12 +1,12 @@
 # Lab01_ImageFiltering
 
-Welcome to the first assignment of the Computer Vision and Machine Learning lab course!
+Welcome to the first assignment of the Computer Vision and Machine Learning Lab course.
 
-This project provides a real-time PyQt6 application for image filtering and edge detection using OpenCV. The goal of this lab is to understand the basic principles of Gaussian and averaging filters, Sobel and Canny edge detection, grayscale conversion, thresholding, and the effect of filter parameters through an interactive webcam application.
+This project provides an interactive PyQt6 application for real-time and offline image filtering and edge detection using OpenCV. You will study Gaussian and averaging filters, Sobel and Canny edge detection, grayscale conversion, image thresholding, and the effect of processing parameters through a live visual interface.
 
 ## 🎯 Assignment Objectives
 
-In this lab, you will complete the implementation of three specific image-processing functions located in `filters.py`:
+In this lab, you will implement three image-processing functions in `filters.py`:
 
 ```python
 apply_gaussian_blur(...)
@@ -14,48 +14,68 @@ apply_averaging_blur(...)
 apply_sobel_edge(...)
 ```
 
-The `apply_canny_edge(...)` function is already implemented and should be used as a reference.
+`apply_canny_edge(...)` is already implemented and should be used as a reference.
 
-Students should modify only `filters.py`. Do not modify `main.py`, `gui.py`, `video_thread.py`, or any other project file.
+Students should modify **only `filters.py`**. Do not modify `main.py`, `gui.py`, `video_thread.py`, `config.py`, or other project files.
 
-The expected processing pipeline is:
+
+
+## 🧠 Processing Pipeline
 
 ```text
-Camera Frame
-     ↓
- ┌───────────────┬────────────────────┐
- │               │                    │
- ↓               ↓                    │
-Blur Selection   Edge Selection        │
- │               │                    │
- ├─ Gaussian     ├─ Sobel             │
- │               │                    │
- └─ Averaging    └─ Canny             │
- │               │                    │
- ↓               ↓                    │
-Blurred View   Edge Detection View     │
- └───────────────┴────────────────────┘
+Input Source
+    │
+    ├── Webcam
+    └── Offline Image / Video
+    │
+    ▼
++-------------------+
+|       Frame       |
++-------------------+
+      │       │
+      │       └───────────────────────┐
+      ▼                               ▼
+ Blur Selection                 Edge Selection
+ │                              │
+ ├── Gaussian                   ├── Sobel
+ └── Averaging                  └── Canny
+ │                              │
+ ▼                              ▼
+Blurred View              Edge Detection View
 ```
+
+
 
 ## ✨ Features
 
-- Real-time webcam image processing with PyQt6 and OpenCV.
+- Real-time webcam processing with PyQt6 and OpenCV.
+- Offline image and video input through **Browse** and **Upload**.
 - Three synchronized views: **Original View**, **Blurred View**, and **Edge Detection View**.
-- Two blur modes: **Gaussian Blur** and **Averaging Blur**.
-- Two edge-detection modes: **Sobel** and **Canny**.
-- Live controls for blur kernel size, Gaussian sigma, and edge-detection thresholds.
-- Gaussian kernel-size control with odd-sized kernels suitable for OpenCV filtering.
-- Sobel and Canny edge outputs displayed in real time.
-- Dark-themed graphical interface.
-- Dynamic image scaling while preserving the original aspect ratio.
-- High-DPI support for modern displays.
-- Parallel processing paths for blur and edge detection.
+- Gaussian Blur and Averaging Blur modes.
+- Sobel and Canny edge-detection modes.
+- Interactive kernel, sigma, and threshold controls.
+- Visible numeric values for every slider.
+- Odd-kernel handling for Gaussian filtering.
+- Modern dark-themed interface with responsive scaling.
+- Explicit camera/file error messages instead of silent failure.
+- Live FPS display.
+- Settings automatically restored between sessions and saved as parameters change.
+- **Reset** button for returning to the default lab configuration.
+- **Restart** button for reopening the current camera or replaying an offline video.
+- Pause/Resume control for both webcam and file sources.
+- Keyboard shortcuts for common actions.
+- Safe processing fallbacks so an incomplete student implementation does not crash the application.
 
 ## 🛠️ Setup & Installation
 
-1. Clone the repository and navigate to the project directory.
+### 1. Clone the repository
 
-2. Create a virtual environment (recommended):
+```bash
+git clone https://github.com/sharif-cvml-lab/cvml-lab01-image-filtering.git
+cd cvml-lab01-image-filtering
+```
+
+### 2. Create a virtual environment
 
 ```bash
 python -m venv venv
@@ -73,13 +93,13 @@ On Windows PowerShell:
 venv\Scripts\Activate.ps1
 ```
 
-3. Install the required dependencies:
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Run the application:
+### 4. Run the application
 
 ```bash
 python main.py
@@ -87,28 +107,47 @@ python main.py
 
 ## 🎮 Using the Application
 
+### Webcam
+
+The application starts with the selected webcam. Use **Camera index** when your computer has more than one camera. If a camera cannot be opened, the application remains usable and shows an explicit status message instead of crashing.
+
+Use:
+
+- **Webcam** to switch back to camera input.
+- **Pause / Resume** to freeze or continue processing.
+- **Restart** to reopen the current source.
+
+### Offline Images and Videos
+
+1. Click **Browse**.
+2. Select an image or video file.
+3. Click **Upload** to load it into the processing pipeline.
+
+Images remain available for interactive parameter changes. Videos are played in real time and can be restarted from the beginning.
+
 ### Blur controls
 
-The application provides two blur modes:
+Switch between:
 
-- **Gaussian Blur** — applies Gaussian smoothing using a configurable kernel size and sigma value.
-- **Averaging Blur** — applies an averaging filter using a configurable square kernel.
+- **Gaussian Blur** — controlled by kernel size and sigma.
+- **Averaging Blur** — controlled by kernel size.
 
-Use the blur mode button to switch between the two methods. Adjust the corresponding parameters with the sliders and observe their effect on the **Blurred View**.
+Gaussian kernel sizes should be positive odd numbers. The interface protects the application from invalid even sizes while the student implementation is incomplete.
 
-For Gaussian filtering, the kernel size should be an odd positive integer. The sigma slider represents values from `0.0` to `5.0`.
+### Edge controls
 
-### Edge detection controls
+Switch between:
 
-The application provides two edge-detection modes:
+- **Sobel** — use the threshold slider in your implementation.
+- **Canny** — use the primary threshold slider. The reference implementation uses the chosen threshold as the lower bound and three times that value as the upper bound.
 
-- **Sobel** — converts the input image to grayscale, computes the horizontal and vertical gradients, combines them into a gradient magnitude, normalizes the result, and applies a binary threshold.
-- **Canny** — uses the provided implementation with the selected threshold as the lower threshold and three times that value as the upper threshold.
+### Parameter interaction
 
-Use the edge mode button to switch between Sobel and Canny. Adjust the threshold and observe how it changes the detected edges.
+Changing a parameter immediately affects the processed views. Numeric values are shown next to all sliders so the selected configuration is always visible.
 
-The edge-detection pipeline operates on the **original webcam frame**, independently of the blur pipeline.
+### Settings and reset
 
+The application saves the current camera and filtering parameters automatically. The status area reports the settings state. Click **Reset** to return all parameters to their default values.
 
 ## 📂 Repository Structure
 
@@ -120,19 +159,21 @@ cvml-lab01-image-filtering/
 ├── main.py
 ├── gui.py
 ├── video_thread.py
+├── config.py
 └── filters.py              # The only file students should modify
 ```
 
-### Module responsibilities
+### Module Responsibilities
 
-- `main.py` — application entry point and PyQt6 application initialization.
-- `gui.py` — graphical user interface, controls, layout, and display rendering.
-- `video_thread.py` — webcam capture, real-time processing, and communication with the GUI.
-- `filters.py` — the student implementation of the image filtering and edge-detection algorithms.
+- `main.py` — application entry point.
+- `gui.py` — PyQt6 interface, controls, persistence, source selection, and rendering.
+- `video_thread.py` — camera/file capture, real-time processing loop, FPS calculation, and safe error handling.
+- `config.py` — shared constants and default parameters.
+- `filters.py` — student implementation of the image-filtering algorithms.
 
-## ⚙️ Important Notes
+## ⌨️ Keyboard Shortcuts
 
-- A webcam accessible as camera index `0` is required by the current implementation.
-- The application processes frames continuously in a background Qt thread.
-- The **Edge Detection View** is produced from the original frame rather than the blurred frame.
-- Do not replace the provided application structure; implement the required algorithms inside the designated functions.
+- `Space` — Pause / Resume.
+- `R` — Reset parameters.
+- `Q` — Quit.
+
