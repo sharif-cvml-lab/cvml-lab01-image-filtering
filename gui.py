@@ -355,7 +355,7 @@ class AppWindow(QMainWindow):
         layout.addWidget(edge_box)
 
         note = QLabel(
-            "Students should edit only filters.py. All controls remain active before the required functions are implemented."
+            " "
         )
         note.setObjectName("Muted")
         note.setWordWrap(True)
